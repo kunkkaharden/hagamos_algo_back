@@ -1,20 +1,13 @@
-import { Schema, model } from 'mongoose';
-
-export interface IUser {
-  id?: string;
-  name: string;
-  email: string;
-  permits: string[];
-  password: string;
-  visible: boolean
+import { Schema } from 'mongoose';
+import {Car, ICar} from './car'
+const baseOptions = {
+  discriminatorKey: "__type",
+};
+export interface IOfficialCar extends ICar{
 }
 
-const userSchema = new Schema<IUser>({
-  name: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
-  permits: { type: [String], required: true },
-  password: { type: String, required: true },
-  visible: { type: Boolean, required: true },
-});
+const officialSchema = new Schema<IOfficialCar>({
+}, baseOptions); 
 
-export const User = model<IUser>('User', userSchema);
+
+export const OfficialCar = Car.discriminator<IOfficialCar>('OfficialCar',  officialSchema);

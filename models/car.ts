@@ -1,12 +1,14 @@
 import { Schema, model } from 'mongoose';
 
 export interface ICar {
-  id?: string;
   car_plate: string;
+  visible: boolean;
 }
 
-const userSchema = new Schema<ICar>({
+const carSchema = new Schema<ICar>({
   car_plate: { type: String, required: true, unique: true },
+  visible: { type: Boolean, required: true, default: true},
+
 });
 
-export const User = model<ICar>('User', userSchema);
+export const Car = model<ICar>('Car', carSchema);

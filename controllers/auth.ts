@@ -14,9 +14,9 @@ export const register = async (req: Request, res: Response) => {
                 message: "User already exists",
             });
         }
-        user = new User({...req.body, visible: true});
+        user = new User(req.body);
         user.password = hashSync(password, genSaltSync(10));
-        user.save();
+        await user.save();
         return res.status(200).json({
             _id: user._id,
             name,

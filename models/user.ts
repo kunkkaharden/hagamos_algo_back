@@ -14,7 +14,7 @@ const userSchema = new Schema<IUser>({
   email: { type: String, required: true, unique: true },
   permits: { type: [String], required: true },
   password: { type: String, required: true },
-  visible: { type: Boolean, required: true },
+  visible: { type: Boolean, required: true, default: true},
 });
 
 export const User = model<IUser>('User', userSchema);

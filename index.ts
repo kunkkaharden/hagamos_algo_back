@@ -2,6 +2,7 @@ import express , {  Request, Response } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import authRoutes from './routes/auth';
+import carsRoutes from './routes/cars';
 import { dbConection } from './db/config';
 dotenv.config();
 
@@ -13,6 +14,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use('/api/auth', authRoutes);
+app.use('/api/cars', carsRoutes);
 
 app.use('*', (req: Request, res: Response) => {
     res.status(404).json({
