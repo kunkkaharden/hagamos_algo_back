@@ -4,7 +4,7 @@ export interface IUser {
   id?: string;
   name: string;
   email: string;
-  permits: string;
+  permits: string[];
   password: string;
   visible: boolean
 }
@@ -12,7 +12,7 @@ export interface IUser {
 const userSchema = new Schema<IUser>({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
-  permits: { type: String, required: true },
+  permits: { type: [String], required: true },
   password: { type: String, required: true },
   visible: { type: Boolean, required: true },
 });
