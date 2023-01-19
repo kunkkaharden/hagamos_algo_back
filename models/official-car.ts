@@ -1,7 +1,7 @@
 import { Schema, model } from 'mongoose';
 
 export interface IUser {
-  // id?: string;
+  id?: string;
   name: string;
   email: string;
   permits: string[];

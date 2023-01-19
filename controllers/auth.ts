@@ -18,10 +18,10 @@ export const register = async (req: Request, res: Response) => {
         user.password = hashSync(password, genSaltSync(10));
         user.save();
         return res.status(200).json({
-            id: user.id,
+            _id: user._id,
             name,
             email,
-            token: generateJwt({id: user.id}),
+            token: generateJwt({_id: user._id}),
         });
     } catch (error) {
         console.log(error);
@@ -49,10 +49,10 @@ export const login = async(req: Request, res: Response) => {
         }
     
         return res.status(201).json({
-            id: user.id,
+            _id: user._id,
             name: user.name,
             email,
-            token: generateJwt({id: user.id}),
+            token: generateJwt({_id: user._id}),
         });
     } catch (error) {
         console.log(error);
@@ -65,9 +65,9 @@ export const login = async(req: Request, res: Response) => {
 export const renew = (req: Request, res: Response) => {
    const user = getUser(req);
    return res.status(201).json({
-    id: user.id,
+    _id: user._id,
     name: user.name,
     email: user.email,
-    token: generateJwt({id: user.id}),
+    token: generateJwt({_id: user._id}),
 });
 }

@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { verify } from "jsonwebtoken";
+import { Types } from "mongoose";
 import { Payload } from "util/payload.interface";
 import { IUser, User } from "../models/user";
 export const jwtStrategy = async(req: RequestUser, res: Response, next: NextFunction) => {
@@ -13,21 +14,21 @@ export const jwtStrategy = async(req: RequestUser, res: Response, next: NextFunc
 
     try {
         const  decoded  = verify(token, process.env.SECRET_JWT);
-        const id = (decoded as Payload).id
-        const user = await User.findOne({ _id: id, visible: true});
+        const _id = (decoded as Payload)._id
+        const user = await User.findOne({ _id , visible: true});
         
         if(!user) {
             return res.status(401).json({
                 message: 'Not authenticated',
             }) 
         }
-
-        req.userData = {
-            id: user.id,
+        req.userData  = {
+            _id: user._id,
             name: user.name,
             permits: user.permits,
             email: user.email,
         };
+
     } catch (error) {
         return res.status(401).json({
             message: 'Not authenticated',
@@ -40,6 +41,6 @@ export const jwtStrategy = async(req: RequestUser, res: Response, next: NextFunc
 
 
 export interface RequestUser extends Request {
-    userData?: Partial<IUser>;
+    userData?: Partial<IUser> &  { _id: Types.ObjectId };
 }
 
