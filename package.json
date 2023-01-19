@@ -7,8 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "tsc -p ./tsconfig.build.json && node ./dist/index.js",
     "start:dev": "nodemon index.ts",
-    "docker": "docker compose up -d",
-    "docker:dev": "docker compose -f docker-compose.dev.yml  up"
+    "docker:db": "docker compose -f docker-compose.db.yml  up"
   },
   "keywords": [],
   "author": "",
@@ -17,11 +16,13 @@
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
-    "express-validator": "^6.14.2"
+    "express-validator": "^6.14.2",
+    "mongoose": "^6.8.4"
   },
   "devDependencies": {
     "@types/cors": "^2.8.13",
     "@types/express": "^4.17.15",
+    "@types/mongoose": "^5.11.97",
     "@types/node": "^18.11.18",
     "nodemon": "^2.0.20",
     "ts-node": "^10.9.1",
