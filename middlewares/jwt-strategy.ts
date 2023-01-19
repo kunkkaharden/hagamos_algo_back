@@ -1,12 +1,12 @@
 import { NextFunction, Request, Response } from "express";
 import { verify } from "jsonwebtoken";
 import { IUser, User } from "../models/user";
-export const validateJWT = async(req: RequestUser, res: Response, next: NextFunction) => {
+export const jwtStrategy = async(req: RequestUser, res: Response, next: NextFunction) => {
     const token = req.header('x-token');
 
     if(!token) {
         return res.status(401).json({
-            message: 'Token not found',
+            message: 'Not authenticated',
         });
     }
 
@@ -16,7 +16,7 @@ export const validateJWT = async(req: RequestUser, res: Response, next: NextFunc
 
         if(!user) {
             return res.status(401).json({
-                message: 'Invalid token',
+                message: 'Not authenticated',
             }) 
         }
 
@@ -28,7 +28,7 @@ export const validateJWT = async(req: RequestUser, res: Response, next: NextFunc
         };
     } catch (error) {
         return res.status(401).json({
-            message: 'Invalid token',
+            message: 'Not authenticated',
         })
         
     }

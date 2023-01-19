@@ -4,7 +4,7 @@ export const checkArray = (value: [string]) => {
         throw new Error('incorrect format.  [Array where each element has at least 3 characters]');
     }
     value.forEach((e) => {
-        if(!(e && e.length > 3)){
+        if(!(e && e.length >= 3)){
             throw new Error('incorrect format, [Array where each element has at least 3 characters]');
         }
     })
