@@ -1,11 +1,14 @@
-export const checkArray = (value: [string]) => {
+import { ValidRoles } from "./ValidRoles";
 
-    if(typeof value  !== "object" ) {
-        throw new Error('incorrect format.  [Array where each element has at least 3 characters]');
+export const checkArray = (value: [string]) => {
+    const allPermittions: string[] = Object.values<string>(ValidRoles);
+    
+    if(!Array.isArray(value)) {
+        throw new Error('incorrect format.  <string[]>');
     }
     value.forEach((e) => {
-        if(!(e && e.length >= 3)){
-            throw new Error('incorrect format, [Array where each element has at least 3 characters]');
+        if(!(e && allPermittions.includes(e))){
+            throw new Error(e + ' Is not a valid permission');
         }
     })
     

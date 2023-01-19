@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { getUser } from "util/get-user";
+import { getUser } from "../util/get-user";
 import { getPermits } from "../util/get-permits";
 
 export const validateRole = async (
@@ -15,16 +15,13 @@ export const validateRole = async (
       message: "User not found",
     });
   }
-
-  if (!permits) {
-    next();
-  }
-
-  if (user.permits.includes(permits)) {
-    next();
-  }
  
-  return res.status(403).json({
-    message: "Not authorized",
-  });
+  
+  if (permits && !user.permits.includes(permits)) {
+    return res.status(403).json({
+      message: "Not authorized.",
+    });
+  }
+
+  next();
 };

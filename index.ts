@@ -14,6 +14,12 @@ app.use(express.json());
 
 app.use('/api/auth', authRoutes);
 
+app.use('*', (req: Request, res: Response) => {
+    res.status(404).json({
+        message: 'not found'
+    });
+});
+
 app.listen(PORT, () => {
     console.log(
         `Server running on ${PORT}.`

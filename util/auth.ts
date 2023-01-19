@@ -1,8 +1,9 @@
 import { NextFunction, Request, Response } from "express";
-import { jwtStrategy } from "./jwt-strategy";
-import { validateRole } from "./validate-role";
+import { jwtStrategy } from "../middlewares/jwt-strategy";
+import { validateRole } from "../middlewares/validate-role";
+import { ValidRoles } from "./ValidRoles";
 
-export const auth = (role: string) => {
+export const auth = (role: ValidRoles = null) => {
   return [
     jwtStrategy,
     setRole(role),
@@ -10,13 +11,13 @@ export const auth = (role: string) => {
   ];
 };
 
-const setRole = (role: string) => {
+const setRole = (role: ValidRoles | null) => {
   const setPermition = (
     req: RequestRole,
     res: Response,
     next: NextFunction
   ) => {
-    // req.permitsData = role;
+    role && (req.permitsData = role);
     next();
   };
 

@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { verify } from "jsonwebtoken";
+import { Payload } from "util/payload.interface";
 import { IUser, User } from "../models/user";
 export const jwtStrategy = async(req: RequestUser, res: Response, next: NextFunction) => {
     const token = req.header('x-token');
@@ -11,9 +12,10 @@ export const jwtStrategy = async(req: RequestUser, res: Response, next: NextFunc
     }
 
     try {
-        const  id  = verify(token, process.env.SECRET_JWT);
-        const user = await User.findOne({id, visible: true});
-
+        const  decoded  = verify(token, process.env.SECRET_JWT);
+        const id = (decoded as Payload).id
+        const user = await User.findOne({ _id: id, visible: true});
+        
         if(!user) {
             return res.status(401).json({
                 message: 'Not authenticated',
