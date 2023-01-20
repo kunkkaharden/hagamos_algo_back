@@ -55,7 +55,7 @@ export const get_all_official = async (req: Request, res: Response) => {
 
 try{
     return res.status(200).json({
-        result: await Car.find({}),
+        result: await OfficialCar.find({}),
     });
 } catch (error) {
     console.log(error);
