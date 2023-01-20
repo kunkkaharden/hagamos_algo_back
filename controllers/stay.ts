@@ -1,10 +1,11 @@
 import { Request, Response } from "express";
-import { Car, ICar } from "models/car";
-import { IResidentCar } from "models/resident-car";
-import { Stay } from "models/stay";
-import { TempStay } from "models/temp-stay";
+import { Car, ICar } from "../models/car";
+import { IResidentCar } from "../models/resident-car";
+import { Stay } from "../models/stay";
+import { TempStay } from "../models/temp-stay";
 import { Document, Types } from "mongoose";
-import { ValidCars } from "util/ValidCars";
+import { getTime } from "../util/getTime";
+import { ValidCars } from "../util/ValidCars";
 
 export const start = async (req: Request, res: Response) => {
   const car_plate = req.params.car_plate;
@@ -60,41 +61,38 @@ export const end = async (req: Request, res: Response) => {
 };
 
 const run = async(
-  car: Document & ICar,
+    car: Document & ICar,
     start_date: Date
 ) => {
-
+    let result;
     switch (car.car_plate) {
         case ValidCars.official:
-            official(car.car_plate, start_date);
+            result = await official(car, start_date);
             break;
         case ValidCars.resident:
-            resident(car, start_date);
+            result = await resident(car, start_date);
             break;
     }
-
+    return result;
 };
-const official = (car_plate: string, start_date: Date) => {
+const official = async (car: Document & Partial<ICar>, start_date: Date) => {
      const stay = new Stay({
         start_date,
         end_date: new Date(),
+        car: car._id,
      });
+     await stay.save();
      return stay;
 };
 const not_resident = (star_date: Date) => {
    const price = 0.05;
-   return price * getTime(star_date);
+   return price * getTime(star_date, new Date());
 };
 
 const resident = async(car: Document & Partial<IResidentCar>, star_date: Date) => {
-     car.time = car.time + getTime(star_date);
+     car.time = car.time + getTime(star_date, new Date());
      await car.save();
      return car;
 };
 
-const getTime = (start_date: Date) => {
-    const start = start_date.getTime() / 1000;
-    const end = new Date().getTime() / 1000;
-    const time = (end - start) / 60;
-    return time;
-}
+

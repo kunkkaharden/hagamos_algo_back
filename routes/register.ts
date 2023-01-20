@@ -12,7 +12,10 @@ router.post('/start/:car_plate',[
 ],  start );
 
 router.post('/end/:car_plate', [
-    ...auth(ValidRoles.create_car),
+    ...auth(ValidRoles.create_stay),
     param('car_plate', "car_plate  [4-10 caracteres]").isLength({min: 4, max: 10}),
     validator,
 ] , end );
+
+
+export default router;
