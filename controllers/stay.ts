@@ -8,8 +8,8 @@ import { Price } from "../enums/Price";
 import { IOfficialCar } from "models/official-car";
 
 export const start = async (req: Request, res: Response) => {
-  const car_plate = req.params.car_plate;
   try {
+    const car_plate = req.params.car_plate;
     let stay = await Stay.findOne({ car_plate, end_date: null });
     
     if (stay) {
@@ -32,8 +32,8 @@ export const start = async (req: Request, res: Response) => {
 };
 
 export const end = async (req: Request, res: Response) => {
-  const car_plate = req.params.car_plate;
   try {
+    const car_plate = req.params.car_plate;
     let stay = await Stay.findOne({ car_plate, end_date: null });
     if (!stay) {
       return res.status(404).json({
