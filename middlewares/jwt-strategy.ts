@@ -15,7 +15,7 @@ export const jwtStrategy = async(req: RequestUser, res: Response, next: NextFunc
     try {
         const  decoded  = verify(token, process.env.SECRET_JWT);
         const _id = (decoded as Payload)._id
-        const user = await User.findOne({ _id , visible: true});
+        const user = await User.findOne({ _id , active: true});
         
         if(!user) {
             return res.status(401).json({

@@ -7,6 +7,6 @@ export const dbConection = async () => {
     console.log("DB ok");
   } catch (error) {
     console.log(error);
-    throw new Error("Internal Server Error");
+    throw new Error("Database error");
   }
 };

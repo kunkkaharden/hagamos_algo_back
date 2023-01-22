@@ -4,7 +4,7 @@ export const checkArray = (value: [string]) => {
     const allPermittions: string[] = Object.values<string>(ValidRoles);
     
     if(!Array.isArray(value)) {
-        throw new Error('incorrect format.  <string[]>');
+        throw new Error('Should be an array of type string');
     }
     value.forEach((e) => {
         if(!(e && allPermittions.includes(e))){

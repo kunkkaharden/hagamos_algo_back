@@ -1,18 +1,12 @@
-import { Blob } from "buffer";
+import { Price } from "../enums/Price";
 import { Request, Response } from "express";
+import { OfficialCar } from "../models/official-car";
 import { ResidentCar } from "../models/resident-car";
-import { Stay } from "../models/stay";
 
 export const reset = async (req: Request, res: Response) => {
   try {
-    await Stay.deleteMany({});
-    const promises = [];
-    const cars = await ResidentCar.find({});
-    cars.forEach((e) => {
-      e.time = 0;
-      promises.push(e.save());
-    }); 
-    await Promise.all(promises);
+    await resetOfficial();
+    await resetResident();
     return res.status(200).json({
       result: true,
     });
@@ -25,17 +19,34 @@ export const reset = async (req: Request, res: Response) => {
 };
 
 export const payments = async (req: Request, res: Response) => {
-  const name = req.query.name ? 
-     req.query.name + '.txt':
-     'payments' + new Date().getTime() + '.txt';
-  const price = 0.05;
-  let text =  'Núm. placa 	Tiempo estacionado (min.) 	Cantidad a pagar \n';
+  let text =  'Núm. placa, Tiempo estacionado (min.), Cantidad a pagar\n';
   const cars = await ResidentCar.find({});
   cars.forEach((e) => {
-      text +=  e.car_plate + "           " + e.time + "                         " +  e.time * price + "\n";
+      text +=  e.car_plate + ", " + e.time + 
+      ", " +  e.time * Price.resident +"\n";
   });
 
-  res.set({"Content-Disposition":`attachment; filename="${name}"`});
+  res.set({"Content-Disposition":`attachment; filename="${req.query.name + '.csv'}"`});
   res.send(text);
 };
 
+
+const resetOfficial = async() => {
+  const promises = [];
+  const cars = await OfficialCar.find({});
+  cars.forEach((e) => {
+    e.stays = [];
+    promises.push(e.save());
+  });
+  await Promise.all(promises);
+}
+
+const resetResident = async() => {
+  const promises = [];
+  const officialCars = await ResidentCar.find({});
+    officialCars.forEach((e) => {
+      e.time = 0;
+      promises.push(e.save());
+    }); 
+    await Promise.all(promises);
+}
