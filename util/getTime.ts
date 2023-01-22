@@ -1,5 +1,5 @@
-export const getTime = (start_date: Date, end_date: Date) => {
-    const start = start_date.getTime() / 1000;
-    const end = end_date.getTime() / 1000;
-    return (end - start) / 60;
+import { IStay } from "../models/stay";
+
+export const getTime = (stay: IStay) => {
+    return Math.trunc((stay.end_date.getTime() - stay.start_date.getTime()) / 1000 / 60); 
 }

@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import authRoutes from './routes/auth';
 import carsRoutes from './routes/cars';
 import manageRoutes from './routes/manage';
+import registerRoutes from './routes/register';
 import { dbConection } from './db/config';
 dotenv.config();
 
@@ -17,6 +18,7 @@ app.use(express.json());
 app.use('/api/auth', authRoutes);
 app.use('/api/cars', carsRoutes);
 app.use('/api/manage', manageRoutes);
+app.use('/api/register', registerRoutes);
 
 app.use('*', (req: Request, res: Response) => {
     res.status(404).json({

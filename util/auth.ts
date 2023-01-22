@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { jwtStrategy } from "../middlewares/jwt-strategy";
 import { validateRole } from "../middlewares/validate-role";
-import { ValidRoles } from "./ValidRoles";
+import { ValidRoles } from "../enums/ValidRoles";
 
 export const auth = (role: ValidRoles = null) => {
   return [

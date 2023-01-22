@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { auth } from '../util/auth';
-import { ValidRoles } from '../util/ValidRoles';
+import { ValidRoles } from '../enums/ValidRoles';
 import { payments, reset } from '../controllers/manage';
 const router: Router = Router();
 router.post('/reset',[

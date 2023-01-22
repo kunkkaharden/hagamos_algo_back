@@ -1,9 +1,9 @@
 import { Router } from 'express';
 import { param } from 'express-validator';
 import { validator } from '../middlewares/validator';
-import { end, start } from 'controllers/stay';
+import { end, start } from '../controllers/stay';
 import { auth } from '../util/auth';
-import { ValidRoles } from '../util/ValidRoles';
+import { ValidRoles } from '../enums/ValidRoles';
 const router: Router = Router();
 router.post('/start/:car_plate',[
     ...auth(ValidRoles.create_stay),

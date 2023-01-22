@@ -4,7 +4,7 @@ import { validator } from '../middlewares/validator';
 import { login, register, renew } from '../controllers/auth';
 import { checkArray } from '../util/checkArray';
 import { auth } from '../util/auth';
-import { ValidRoles } from '../util/ValidRoles';
+import { ValidRoles } from '../enums/ValidRoles';
 const router: Router = Router();
 router.post('/register',[
     ...auth(ValidRoles.create_user),

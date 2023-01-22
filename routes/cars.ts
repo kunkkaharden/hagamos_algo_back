@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { body } from 'express-validator';
 import { validator } from '../middlewares/validator';
 import { auth } from '../util/auth';
-import { ValidRoles } from '../util/ValidRoles';
+import { ValidRoles } from '../enums/ValidRoles';
 import { get_all_official, register_official, register_resident } from '../controllers/cars';
 const router: Router = Router();
 router.post('/official',[

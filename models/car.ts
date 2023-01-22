@@ -1,14 +1,19 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model, Document } from 'mongoose';
 
-export interface ICar {
+const baseOptions = {
+  discriminatorKey: '__type',
+}
+
+export interface ICar extends Document {
+  __type: string;
   car_plate: string;
-  visible: boolean;
+  active: boolean;
 }
 
 const carSchema = new Schema<ICar>({
   car_plate: { type: String, required: true, unique: true },
-  visible: { type: Boolean, required: true, default: true},
+  active: { type: Boolean, required: true, default: true},
 
-});
+}, baseOptions);
 
 export const Car = model<ICar>('Car', carSchema);

@@ -1,25 +1,26 @@
 import { Request, Response } from "express";
 import { Car, ICar } from "../models/car";
 import { IResidentCar } from "../models/resident-car";
-import { Stay } from "../models/stay";
-import { TempStay } from "../models/temp-stay";
-import { Document, Types } from "mongoose";
+import { IStay, Stay } from "../models/stay";
 import { getTime } from "../util/getTime";
-import { ValidCars } from "../util/ValidCars";
+import { ValidCars } from "../enums/ValidCars";
+import { Price } from "../enums/Price";
+import { IOfficialCar } from "models/official-car";
 
 export const start = async (req: Request, res: Response) => {
   const car_plate = req.params.car_plate;
   try {
-    let tempStay = await TempStay.findOne({ car_plate });
-    if (tempStay) {
+    let stay = await Stay.findOne({ car_plate, end_date: null });
+    
+    if (stay) {
       return res.status(400).json({
         message: "The car is ready registered",
       });
     }
-    tempStay = new TempStay(req.body);
-    await tempStay.save();
+    stay = new Stay({ car_plate });
+    await stay.save();
     return res.status(200).json({
-      _id: tempStay._id,
+      _id: stay._id,
       car_plate,
     });
   } catch (error) {
@@ -33,25 +34,24 @@ export const start = async (req: Request, res: Response) => {
 export const end = async (req: Request, res: Response) => {
   const car_plate = req.params.car_plate;
   try {
-    let tempStay = await TempStay.findOne({ car_plate });
-    if (!tempStay) {
+    let stay = await Stay.findOne({ car_plate, end_date: null });
+    if (!stay) {
       return res.status(404).json({
         message: "The car is not registered",
       });
     }
-    const car = await Car.findOne({ car_plate });
+    stay.end_date = new Date();
+    await stay.save();
+
+    const car = await Car.findOne({ car_plate, active: true });
     let result;
     if (!car) {
-        result = not_resident(tempStay.start_date);
+        result = not_resident(stay);
     }else {
-
-        result = await run(car, tempStay.start_date);
+        result = await switchCar(car, stay);
     }
 
-    await tempStay.delete();
-    return res.status(200).json({
-        result,
-      });
+    return res.status(200).json(result);
   } catch (error) {
     console.log(error);
     return res.status(500).json({
@@ -60,39 +60,41 @@ export const end = async (req: Request, res: Response) => {
   }
 };
 
-const run = async(
-    car: Document & ICar,
-    start_date: Date
-) => {
+const switchCar = async(car: ICar, stay: IStay ) => {
     let result;
-    switch (car.car_plate) {
+    switch (car.__type) {
         case ValidCars.official:
-            result = await official(car, start_date);
+            result = await official(car as IOfficialCar, stay);
             break;
         case ValidCars.resident:
-            result = await resident(car, start_date);
+            result = await resident(car as IResidentCar, stay);
             break;
     }
     return result;
 };
-const official = async (car: Document & Partial<ICar>, start_date: Date) => {
-     const stay = new Stay({
-        start_date,
-        end_date: new Date(),
-        car: car._id,
-     });
-     await stay.save();
-     return stay;
+const official = async (car: IOfficialCar, stay: IStay) => {
+    const time = getTime(stay);
+    car.stays.push(stay._id);
+    await car.save();
+    return {
+      time
+     }
 };
-const not_resident = (star_date: Date) => {
-   const price = 0.05;
-   return price * getTime(star_date, new Date());
+const not_resident = (stay: IStay) => {
+  const time = getTime(stay);
+   return {
+    price: Price.not_resident * time,
+    time
+   };
 };
 
-const resident = async(car: Document & Partial<IResidentCar>, star_date: Date) => {
-     car.time = car.time + getTime(star_date, new Date());
+const resident = async(car: IResidentCar, stay: IStay) => {
+     const time = getTime(stay);
+     car.time = car.time + time;
      await car.save();
-     return car;
+     return {
+      time
+     };
 };
 
 

@@ -1,20 +1,18 @@
-import { Schema, model, Types } from 'mongoose';
+import { Schema, model, Document } from 'mongoose';
 
-export interface IStay {
+export interface IStay extends Document {
   car_plate: string;
   start_date: Date;
   end_date: Date;
-  car: Types.ObjectId;
-  visible: boolean;
+  active: boolean;
 
 }
 
 const staySchema = new Schema<IStay>({
   car_plate: { type: String, required: true },
-  visible: { type: Boolean, required: true, default: true},
+  active: { type: Boolean, required: true,  default: true},
   start_date: { type: Date, required: true, default: new Date()},
-  end_date: { type: Date, required: true, default: new Date()},
-  car: { type: Schema.Types.ObjectId, ref: 'car'},
+  end_date: { type: Date, default: null},
 
 });
 

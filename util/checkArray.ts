@@ -1,4 +1,4 @@
-import { ValidRoles } from "./ValidRoles";
+import { ValidRoles } from "../enums/ValidRoles";
 
 export const checkArray = (value: [string]) => {
     const allPermittions: string[] = Object.values<string>(ValidRoles);
