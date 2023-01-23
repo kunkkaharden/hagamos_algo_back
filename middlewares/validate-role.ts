@@ -10,9 +10,10 @@ export const validateRole = async (
   const permits = getPermits(req);
   const user = getUser(req);
 
-  if (!user) {
-    return res.status(400).json({
-      message: "User not found",
+  if (!user ) {
+    console.log("Not found userData in Request");
+    return res.status(500).json({
+      message: "Intenal Server Error",
     });
   }
  
