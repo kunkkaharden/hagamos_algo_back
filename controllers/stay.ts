@@ -17,7 +17,10 @@ export const start = async (req: Request, res: Response) => {
         message: "The car is ready registered",
       });
     }
-    stay = new Stay({ car_plate });
+    stay = new Stay({ 
+      car_plate,
+      start_date: new Date(),
+     });
     await stay.save();
     return res.status(200).json({
       _id: stay._id,
