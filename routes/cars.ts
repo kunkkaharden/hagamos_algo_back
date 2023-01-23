@@ -26,6 +26,12 @@ router.get('/:id',[
 ], findOne );
 
 router.get('/',[...auth()], findAll );
+router.patch('/:id',[
+    ...auth(ValidRoles.create_car),
+    param('id', 'Id is required and has to be a MongoID').isMongoId(),
+    body('car_plate', "car_plate  [4-10 caracteres]").isLength({min: 4, max: 10}),
+    validator,
+], findAll );
 
 
 

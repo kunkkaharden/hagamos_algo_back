@@ -101,3 +101,24 @@ export const findAll = async (req: Request, res: Response) => {
     }
   };
   
+  export const updateCar = async (req: Request, res: Response) => {
+    try {
+      const _id = req.params.id;
+      const {car_plate}: ICar = req.body;
+      const car = await Car.findOne({ _id, active: true });
+      if (!car) {
+        return res.status(404).json({
+          message: `Car with id ${_id} not found`,
+        });
+      }
+  
+      car.car_plate = car_plate;
+      await car.save();
+      return res.status(200).json(true);
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({
+        message: "Internal Server Error",
+      });
+    }
+  };
