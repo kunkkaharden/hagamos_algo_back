@@ -196,14 +196,13 @@ export const activeUser = async (req: Request, res: Response) => {
     try {
     const user = await User.findOne({email: 'admin@admin.com'});
     if (!user) {
-      const tempUser: IUser = {
+      const newUser = new User({
         name: 'admin',
         email: 'admin@admin.com',
         password: hashSync('adminadmin', genSaltSync(10)),
         active: true,
         permits: Object.values<string>(ValidRoles)
-      }
-      const newUser = new User(tempUser);
+      });
       await newUser.save();
     }
   } catch (error) {
