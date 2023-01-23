@@ -3,6 +3,7 @@ import { genSaltSync, hashSync, compareSync } from "bcryptjs";
 import { IUser, User } from "../models/user";
 import { generateJwt } from "../util/jwt";
 import { getUser } from "../util/get-user";
+import { ValidRoles } from "../enums/ValidRoles";
 export const register = async (req: Request, res: Response) => {
   try {
     const { name, email, password }: IUser = req.body;
@@ -189,3 +190,24 @@ export const activeUser = async (req: Request, res: Response) => {
       });
     }
   };
+
+
+  export const init = async () => {
+    try {
+    const user = await User.findOne({email: 'admin@admin.com'});
+    if (!user) {
+      const tempUser: IUser = {
+        name: 'admin',
+        email: 'admin@admin.com',
+        password: hashSync('adminadmin', genSaltSync(10)),
+        active: true,
+        permits: Object.values<string>(ValidRoles)
+      }
+      const newUser = new User(tempUser);
+      await newUser.save();
+    }
+  } catch (error) {
+    console.log(error);
+    throw new Error("Internal Server Error");
+  }
+  }; 
