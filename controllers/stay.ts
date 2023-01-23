@@ -98,3 +98,34 @@ const resident = async(car: IResidentCar, stay: IStay) => {
 };
 
 
+export const findAll = async (req: Request, res: Response) => {
+  try {
+    return res
+      .status(200)
+      .json(await Stay.find({ active: true }));
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Internal Server Error",
+    });
+  }
+};
+export const findOne = async (req: Request, res: Response) => {
+  try {
+    const _id = req.params.id;
+    const stay = await Stay.findOne({ _id, active: true });
+
+    if (!stay) {
+      return res.status(404).json({
+        message: `Stay with id ${_id} not found`,
+      });
+    }
+    return res.status(200).json(stay);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Internal Server Error",
+    });
+  }
+};
+

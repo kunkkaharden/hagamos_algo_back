@@ -3,7 +3,7 @@ import { body, param } from 'express-validator';
 import { validator } from '../middlewares/validator';
 import { auth } from '../util/auth';
 import { ValidRoles } from '../enums/ValidRoles';
-import { createCar, deleteCar, findAll, findOne } from '../controllers/cars';
+import { createCar, deleteCar, findAll, findOne, updateCar } from '../controllers/cars';
 import { checkTypeCars } from '../util/checkTypeCars';
 const router: Router = Router();
 router.post('/',[
@@ -31,7 +31,7 @@ router.patch('/:id',[
     param('id', 'Id is required and has to be a MongoID').isMongoId(),
     body('car_plate', "car_plate  [4-10 caracteres]").isLength({min: 4, max: 10}),
     validator,
-], findAll );
+], updateCar );
 
 
 
