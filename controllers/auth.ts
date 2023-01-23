@@ -73,7 +73,7 @@ export const findAll = async (req: Request, res: Response) => {
   try {
     return res
       .status(200)
-      .json(await User.find({ active: true }).select({ password: 0 }));
+      .json(await User.find({ active: true }, {password: 0}));
   } catch (error) {
     console.log(error);
     return res.status(500).json({
@@ -84,9 +84,7 @@ export const findAll = async (req: Request, res: Response) => {
 export const findOne = async (req: Request, res: Response) => {
   try {
     const _id = req.params.id;
-    const user = await User.findOne({ _id, active: true }).select({
-      password: 0,
-    });
+    const user = await User.findOne({ _id, active: true }, {password: 0});
 
     if (!user) {
       return res.status(404).json({

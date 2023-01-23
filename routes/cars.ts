@@ -1,23 +1,32 @@
 import { Router } from 'express';
-import { body } from 'express-validator';
+import { body, param } from 'express-validator';
 import { validator } from '../middlewares/validator';
 import { auth } from '../util/auth';
 import { ValidRoles } from '../enums/ValidRoles';
-import { get_all_official, register_official, register_resident } from '../controllers/cars';
+import { createCar, deleteCar, findAll, findOne } from '../controllers/cars';
+import { checkTypeCars } from '../util/checkTypeCars';
 const router: Router = Router();
-router.post('/official',[
+router.post('/',[
     ...auth(ValidRoles.create_car),
     body('car_plate', "car_plate  [4-10 caracteres]").isLength({min: 4, max: 10}),
+    body('type').custom(checkTypeCars),
     validator,
-], register_official );
+], createCar );
 
-router.post('/resident', [
+router.delete('/:id',[
     ...auth(ValidRoles.create_car),
-    body('car_plate', "car_plate  [4-10 caracteres]").isLength({min: 4, max: 10}),
+    param('id', 'Id is required and has to be a MongoID').isMongoId(),
     validator,
-] , register_resident );
+], deleteCar );
 
-router.get('/official',[...auth()], get_all_official );
-// router.get('/:id',[...auth()], renew );
+router.get('/:id',[
+    ...auth(),
+    param('id', 'Id is required and has to be a MongoID').isMongoId(),
+    validator,
+], findOne );
+
+router.get('/',[...auth()], findAll );
+
+
 
 export default router;
