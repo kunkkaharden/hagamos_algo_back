@@ -54,7 +54,7 @@ export const findAll = async (req: Request, res: Response) => {
 export const deleteRegistro = async (req: Request, res: Response) => {
  
   try {
-    const enlace = req.body.enlace;
+    const enlace = req.query.enlace;
     const registro = await Registro.findOne({ enlace });
     await registro.delete();
   } catch (error) {

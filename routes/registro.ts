@@ -16,6 +16,10 @@ router.post('/add',[
 
 
 router.get('/',[sendLogs] ,findAll );
-router.delete('/',[jwtStrategy], deleteRegistro );
+router.delete('/',[
+    jwtStrategy,
+    query('enlace', "enlace  [4-10 caracteres]").isLength({min: 4, max: 30}),
+    validator,
+], deleteRegistro );
 
 export default router;
