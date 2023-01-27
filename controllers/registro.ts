@@ -38,10 +38,11 @@ export const addRegistro = async (req: Request, res: Response) => {
 export const findAll = async (req: Request, res: Response) => {
   const skip = +req.query.skip;
   const limit = +req.query.limit;
+  const categoria = req.query.categoria;
   try {
     return res
       .status(200)
-      .json(await Registro.find({}).skip(skip).limit(limit));
+      .json(await Registro.find({categoria}).sort({fecha: -1}) .skip(skip).limit(limit));
   } catch (error) {
     console.log(error);
     return res.status(500).json({

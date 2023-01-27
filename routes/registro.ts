@@ -2,8 +2,9 @@ import { Router } from 'express';
 import { body } from 'express-validator';
 import { validator } from '../middlewares/validator';
 import { addRegistro, deleteRegistro, findAll,  } from '../controllers/registro';
-import { jwtStrategy } from 'middlewares/jwt-strategy';
-import { checkCategorias } from 'util/checkCategorias';
+import { jwtStrategy } from '../middlewares/jwt-strategy';
+import { checkCategorias } from '../util/checkCategorias';
+import { sendLogs } from '../middlewares/send-logs';
 const router: Router = Router();
 router.post('/add',[
     jwtStrategy,
@@ -14,7 +15,7 @@ router.post('/add',[
 ],  addRegistro );
 
 
-router.get('/', findAll );
+router.get('/',[sendLogs] ,findAll );
 router.delete('/',[jwtStrategy], deleteRegistro );
 
 export default router;

@@ -2,6 +2,7 @@ import express , {  Request, Response } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import registroRoutes from './routes/registro';
+import postRoutes from './routes/post';
 import { dbConection } from './db/config';
 dotenv.config();
 
@@ -14,6 +15,7 @@ app.use(express.json());
 
 
 app.use('/api/registro', registroRoutes);
+app.use('/api/publicacion', postRoutes);
 
 app.use('*', (req: Request, res: Response) => {
     res.status(404).json({
