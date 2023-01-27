@@ -20,4 +20,4 @@ COPY package*.json ./
 RUN npm install --prod
 COPY --from=builder  /app/dist ./dist
 COPY .env ./
-CMD [ "node","dist/index.js" ]
+CMD [ "node","./dist/index.js" ]
