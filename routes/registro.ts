@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { body } from 'express-validator';
+import { body, query } from 'express-validator';
 import { validator } from '../middlewares/validator';
 import { addRegistro, deleteRegistro, findAll,  } from '../controllers/registro';
 import { jwtStrategy } from '../middlewares/jwt-strategy';
