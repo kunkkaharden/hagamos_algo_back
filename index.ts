@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import registroRoutes from './routes/registro';
 import postRoutes from './routes/post';
 import { dbConection } from './db/config';
+import { generateJwt } from './util/jwt';
 dotenv.config();
 
 const PORT = process.env.PORT;
@@ -24,6 +25,7 @@ app.use('*', (req: Request, res: Response) => {
 });
 
 app.listen(PORT, () => {
+    console.log(generateJwt({saludo: 'hola'}));
     console.log(
         `Server running on ${PORT}.`
     )
