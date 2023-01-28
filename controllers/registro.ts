@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { IRegistro, Registro } from "models/registro";
+import { IRegistro, Registro } from "../models/registro";
 
 export const addRegistro = async (req: Request, res: Response) => {
   try {
@@ -36,13 +36,14 @@ export const addRegistro = async (req: Request, res: Response) => {
 
 
 export const findAll = async (req: Request, res: Response) => {
-  const skip = +req.query.skip;
-  const limit = +req.query.limit;
-  const categoria = req.query.categoria;
+  const filter: {categoria?: string} = {};
+  const skip = +req.query.skip | 0;
+  const limit = +req.query.limit | 10;
+  req.query.categoria && (filter.categoria = (req.query.categoria as string));
   try {
     return res
       .status(200)
-      .json(await Registro.find({categoria}).sort({fecha: -1}) .skip(skip).limit(limit));
+      .json(await Registro.find(filter).sort({fecha: -1}).skip(skip).limit(limit));
   } catch (error) {
     console.log(error);
     return res.status(500).json({
@@ -54,9 +55,12 @@ export const findAll = async (req: Request, res: Response) => {
 export const deleteRegistro = async (req: Request, res: Response) => {
  
   try {
-    const enlace = req.query.enlace;
+    const enlace = req.body.enlace;
     const registro = await Registro.findOne({ enlace });
-    await registro.delete();
+    registro && await registro.delete();
+    return res
+      .status(200)
+      .json(true);
   } catch (error) {
     console.log(error);
     return res.status(500).json({

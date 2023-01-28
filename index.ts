@@ -7,7 +7,9 @@ import { dbConection } from './db/config';
 import { generateJwt } from './util/jwt';
 dotenv.config();
 
-const PORT = process.env.PORT;
+const PORT = process.env.APP_PORT;
+console.log('variables', process.env.APP_PORT);
+
 const app = express();
 dbConection();
 
