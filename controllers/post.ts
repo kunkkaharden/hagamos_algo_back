@@ -14,10 +14,10 @@ export const loadData = async(req: Request, res: Response)  => {
       return e.match(mensaje);
     });
     
-    return {
+    return res.status(200).json({
         image: imageF ? getImage(imageF) : "",
         text
-    }
+    });
 }
 const  getImage = (image: string) => {
   const inicio = "https://cdn1";

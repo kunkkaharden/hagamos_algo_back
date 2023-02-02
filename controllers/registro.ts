@@ -37,13 +37,19 @@ export const addRegistro = async (req: Request, res: Response) => {
 
 export const findAll = async (req: Request, res: Response) => {
   const filter: {categoria?: string} = {};
-  const skip = +req.query.skip | 0;
-  const limit = +req.query.limit | 10;
+  const skip = +req.query.skip || 0;
+  const limit = +req.query.limit || 10;
   req.query.categoria && (filter.categoria = (req.query.categoria as string));
   try {
+
+    const total = await Registro.count(filter);
+    const result = await Registro.find(filter).sort({fecha: -1}).skip(skip).limit(limit);
     return res
       .status(200)
-      .json(await Registro.find(filter).sort({fecha: -1}).skip(skip).limit(limit));
+      .json({
+        total,
+        result,
+      });
   } catch (error) {
     console.log(error);
     return res.status(500).json({
